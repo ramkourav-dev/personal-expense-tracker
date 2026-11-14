@@ -40,8 +40,8 @@ def createDatabase():
     
     # Trying
     try:
-        cursor.execute("CREATE DATABASE IF NOT EXISTS %s", (DB_NAME))
-        print("[✓] All Set.")
+        cursor.execute("CREATE DATABASE IF NOT EXISTS %s;", (DB_NAME))
+        print("[✓] Database.")
         return True
         
     except mysql.connector.Error as err:
@@ -73,5 +73,44 @@ def dbConnection():
         return None, f"[!] MySQL Error: {err}"
 
 # Creating Table
-def createTables():
-    pass
+def createTable():
+    # Connection & Verification
+    conn, err = dbConnection()
+    if err:
+        print(err)
+        return None
+        
+    # Cursor
+    cursor = conn.cursor()
+    
+    # Trying
+    try:
+        query = """
+            CREATE TABLE IF NOT EXISTS expenses (
+                expense_id INT AUTO_INCREMENT PRIMARY KEY,
+                title VARCHAR(150) NOT NULL,
+                price DECIMAL(10, 2) NOT NULL,
+                category VARCHAR(64) NOT NULL,
+                date DATE NOT NULL,
+                note TEXT,
+                time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        """
+        cursor.execute(query)
+        
+        print("[✓] Table")
+        return True
+        
+    # If Any Error
+    except mysql.connector.Error as err:
+        print(f"[!] MySQL Error: {err}")
+        return False
+        
+    # Closing 
+    finally:
+        if cursor is not None:
+            cursor.close()
+        if conn is not None:
+            conn.close()
+            
+#
