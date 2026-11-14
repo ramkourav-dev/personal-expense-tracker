@@ -36,11 +36,12 @@ def createDatabase():
         return None
         
     # Cursor
-    cursor = conn.cursor()
+    cursor = None
     
     # Trying
     try:
-        cursor.execute("CREATE DATABASE IF NOT EXISTS %s;", (DB_NAME))
+        cursor = conn.cursor()
+        cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{DB_NAME}`;")
         print("[✓] Database.")
         return True
         
@@ -49,10 +50,11 @@ def createDatabase():
         return False
         
     # Closing
-    if cursor is not None:
-        cursor.close()
-    if conn is not None:
-        conn.close()
+    finally:
+        if cursor is not None:
+            cursor.close()
+        if conn is not None:
+            conn.close()
         
 # Connection To Database
 def dbConnection():
@@ -81,10 +83,11 @@ def createTable():
         return None
         
     # Cursor
-    cursor = conn.cursor()
+    cursor = co
     
     # Trying
     try:
+        cursor = conn.cursor()
         query = """
             CREATE TABLE IF NOT EXISTS expenses (
                 expense_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -113,4 +116,3 @@ def createTable():
         if conn is not None:
             conn.close()
             
-#
