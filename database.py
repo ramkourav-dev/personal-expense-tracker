@@ -10,7 +10,7 @@ import mysql.connector
 from config import DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT
 
 # -------- Functions -------- #
-# For Connection
+# Root Connection
 def createConnection():
     # Trying
     try:
@@ -21,8 +21,57 @@ def createConnection():
             port=DB_PORT
         )
         
-        return conn
+        return conn, None
         
     # If Any Error
     except mysql.connector.Error as err:
+        return None, f"[!] MySQL Error: {err}"
+
+# Creating Database
+def createDatabase():
+    # Connection & Verification
+    conn, err = createConnection()
+    if err:
+        print(err)
+        return None
+        
+    # Cursor
+    cursor = conn.cursor()
+    
+    # Trying
+    try:
+        cursor.execute("CREATE DATABASE IF NOT EXISTS %s", (DB_NAME))
+        print("[✓] All Set.")
+        return True
+        
+    except mysql.connector.Error as err:
         print(f"[!] MySQL Error: {err}")
+        return False
+        
+    # Closing
+    if cursor is not None:
+        cursor.close()
+    if conn is not None:
+        conn.close()
+        
+# Connection To Database
+def dbConnection():
+    # Trying
+    try:
+        conn = mysql.connector.connect(
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            port=DB_PORT,
+            database=DB_NAME
+        )
+        
+        return conn, None
+        
+    # If Any Error
+    except mysql.connector.Error as err:
+        return None, f"[!] MySQL Error: {err}"
+
+# Creating Table
+def createTables():
+    pass
