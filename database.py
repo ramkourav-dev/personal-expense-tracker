@@ -33,7 +33,7 @@ def createDatabase():
     conn, err = createConnection()
     if err:
         print(err)
-        return None
+        return False
         
     # Cursor
     cursor = None
@@ -80,7 +80,7 @@ def createTable():
     conn, err = dbConnection()
     if err:
         print(err)
-        return None
+        return False
         
     # Cursor
     cursor = None
@@ -94,9 +94,9 @@ def createTable():
                 title VARCHAR(150) NOT NULL,
                 price DECIMAL(10, 2) NOT NULL,
                 category VARCHAR(64) NOT NULL,
-                date DATE NOT NULL,
+                expense_date DATE NOT NULL,
                 note TEXT,
-                time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         """
         cursor.execute(query)
