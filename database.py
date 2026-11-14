@@ -83,7 +83,7 @@ def createTable():
         return None
         
     # Cursor
-    cursor = co
+    cursor = None
     
     # Trying
     try:
