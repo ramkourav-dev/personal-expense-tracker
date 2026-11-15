@@ -47,7 +47,7 @@ def createDatabase():
         
     except mysql.connector.Error as err:
         print(f"[!] MySQL Error: {err}")
-        return False
+        return None
         
     # Closing
     finally:
@@ -107,7 +107,7 @@ def createTable():
     # If Any Error
     except mysql.connector.Error as err:
         print(f"[!] MySQL Error: {err}")
-        return False
+        return None
         
     # Closing 
     finally:
@@ -116,3 +116,120 @@ def createTable():
         if conn is not None:
             conn.close()
             
+# Insert Expense
+def insertExpense(title, price, category, expense_date, note=None):
+    # Connection
+    conn, err = dbConnection()
+    if err:
+        print(err)
+        return False
+        
+    # Cursor
+    cursor = None
+    
+    # Trying
+    try:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO expenses(
+                title, price, category, expense_date, note
+            )
+            VALUES(
+                %s, %s, %s, %s, %s
+            )
+            """,
+            (title, price, category, expense_date, note)
+        )
+        conn.commit()
+        return True
+        
+    # If Any Error
+    except mysql.connector.Error as err:
+        print(f"[!] MySQL Error: {err}")
+        conn.rollback()
+        return None
+        
+    # Closing
+    finally:
+        if cursor is not None:
+            cursor.close()
+        if conn is not None:
+            conn.close()
+            
+# Getting Expenses
+def getExpenses():
+    # Connection
+    conn, err = dbConnection()
+    if err:
+        print(err)
+        return None
+        
+    # Cursor
+    cursor = None
+    
+    # Trying
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM expenses ORDER BY expense_date DESC;")
+        expenses = cursor.fetchall()
+        
+        # Printing
+        if not expenses:
+            print("[!] No Expenses Found")
+        else:
+            for expense in expenses:
+                print(expense)
+                
+        return expenses
+    
+    # If Any Error
+    except mysql.connector.Error as err:
+        print(f"[!] MySQL Error: {err}")
+        return None
+        
+    # Finally
+    finally:
+        if cursor is not None:
+            cursor.close()
+        if conn is not None:
+            conn.close()
+            
+# Getting Single Expense
+def getExpense(expense_id):
+    # Connection
+    conn, err = dbConnection()
+    if err:
+        print(err)
+        return None
+        
+    # Cursor
+    cursor = None
+    
+    # Trying
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM expenses WHERE expense_id = %s;", (expense_id,))
+        expense = cursor.fetchone()
+        
+        # Printing
+        if expense is None:
+            print("[!] No Expense Found")
+            return None
+            
+        else:
+            print(expense)
+            
+        return expense
+    
+    # If Any Error
+    except mysql.connector.Error as err:
+        print(f"[!] MySQL Error: {err}")
+        return None
+        
+    # Finally
+    finally:
+        if cursor is not None:
+            cursor.close()
+        if conn is not None:
+            conn.close()
