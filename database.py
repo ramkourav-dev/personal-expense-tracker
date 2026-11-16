@@ -278,3 +278,38 @@ def updateExpense(expense_id, title, price, category, expense_date, note=None):
             cursor.close()
         if conn is not None:
             conn.close()
+            
+# Deleting Expense
+def deleteExpense(expense_id):
+    # Connecting to database
+    conn, err = dbConnection()
+    if err:
+        print(err)
+        return None
+        
+    # Cursor
+    cursor = None
+    
+    # Trying
+    try:
+        cursor = conn.cursor()
+        cursor.execute(
+            " DELETE FROM expenses WHERE expense_id = %s;",
+            (expense_id,)
+        )
+        conn.commit()
+        
+        print("[✓] Deleted.")
+        return True
+        
+    # If Any Error
+    except mysql.connector.Error as err:
+        print(f"[!] MySQL Error: {err}")
+        return False
+        
+    # Closing
+    finally:
+        if cursor is not None:
+            cursor.close()
+        if conn is not None:
+            conn.close()
