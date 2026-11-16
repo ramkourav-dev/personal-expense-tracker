@@ -236,4 +236,44 @@ def getExpense(expense_id):
             
 # Updating Expense
 def updateExpense(expense_id, title, price, category, expense_date, note=None):
-    pass
+    # Connecting Do Database
+    conn, err = dbConnection()
+    if err:
+        print(err)
+        return None
+        
+    # Cursor
+    cursor = None
+    
+    # Trying
+    try:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+                UPDATE expences
+                SET
+                    title = %s,
+                    price = %s,
+                    category = %s,
+                    expense_date = %s,
+                    note = %s
+                WHERE expences_id = %s;
+            """,
+            (title, price, category, expense_date, note, expense_id)
+        )
+        rowsAffected = cursor.rowcount()
+        
+        print(f"[{rowsAffected}] Affected!")
+        return True
+    
+    # If Any Error
+    except mysql.connector.Error as err:
+        print(f"[!] MySQL Error: {err}")
+        return False
+        
+    # Closing
+    finally:
+        if cursor is not None:
+            cursor.close()
+        if conn is not None:
+            conn.close()
