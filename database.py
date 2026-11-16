@@ -233,3 +233,7 @@ def getExpense(expense_id):
             cursor.close()
         if conn is not None:
             conn.close()
+            
+# Updating Expense
+def updateExpense(expense_id, title, price, category, expense_date, note=None):
+    pass
