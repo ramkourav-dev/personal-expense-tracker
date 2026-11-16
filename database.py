@@ -250,18 +250,19 @@ def updateExpense(expense_id, title, price, category, expense_date, note=None):
         cursor = conn.cursor()
         cursor.execute(
             """
-                UPDATE expences
+                UPDATE expenses
                 SET
                     title = %s,
                     price = %s,
                     category = %s,
                     expense_date = %s,
                     note = %s
-                WHERE expences_id = %s;
+                WHERE expense_id = %s;
             """,
             (title, price, category, expense_date, note, expense_id)
         )
-        rowsAffected = cursor.rowcount()
+        rowsAffected = cursor.rowcount
+        conn.commit()
         
         print(f"[{rowsAffected}] Affected!")
         return True
