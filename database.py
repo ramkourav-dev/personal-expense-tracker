@@ -10,6 +10,10 @@ import mysql.connector
 from config import DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT
 
 # -------- Functions -------- #
+# Checking DB Existence
+def isdbCreated():
+    pass
+
 # Root Connection
 def createConnection():
     # Trying
