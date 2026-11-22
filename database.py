@@ -316,4 +316,10 @@ def deleteExpense(expense_id):
             
 # Checking DB Existence
 def isdbCreated():
-    pass
+    # Connection
+    conn, err = dbConnection()
+
+    # Checking
+    if err:
+        return False
+    else True

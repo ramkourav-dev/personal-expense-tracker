@@ -17,4 +17,22 @@ print(
 )
 
 # ---- Check & Create DB ---- #
-if ###########################
+if not(isdbCreated()):
+    # Showing Error
+    print("[!] Database Not Created.")
+    
+    # Showing Solution
+    print("\n\n[*] Database Not Created.")
+    
+    #Creating
+    createDatabase()
+    
+    #Creating Tables
+    createTable()
+    
+#If Created
+else:
+    print("[✓] Database Already Created.")
+    
+# ----- Expense Tracker ----- #
+# Showing Menu Items###################
